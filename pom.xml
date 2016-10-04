@@ -13,7 +13,7 @@
     <javaVersion>1.8</javaVersion>
     <galagoVersion>3.11-SNAPSHOT</galagoVersion>
     <chaiVersion>0.9-SNAPSHOT</chaiVersion>
-    <mainClass>edu.umass.cs.ciir.searchie.starter.Main</mainClass>
+    <mainClass>edu.umass.cs.ciir.searchie.starter.BasicExperiment</mainClass>
   </properties>
 
   <distributionManagement>
