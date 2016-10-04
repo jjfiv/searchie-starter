@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BasicExperiment {
+  public static String defaultCRFSuiteBinary = "/home/jfoley/bin/crfsuite-0.12/bin/crfsuite";
   public static void main(String[] args) throws IOException {
 
     // galago's Parameters class gives us argument parsing:
@@ -57,8 +58,8 @@ public class BasicExperiment {
     // delete all temporary files we create as we go
     try (TemporaryDirectory tmpdir = new TemporaryDirectory()) {
       // CRFSuite learner class (basically, where do we save tmp files?)
-      CRFSuiteLearner learner = new CRFSuiteLearner(tmpdir, argp.get("crfsuite", "/home/jfoley/bin/crfsuite-0.12/bin/crfsuite"));
-      
+      CRFSuiteLearner learner = new CRFSuiteLearner(tmpdir, argp.get("crfsuite", defaultCRFSuiteBinary));
+
       // set up a CRFSuite model (lbfgs is typically the best).
       learner.setModel(argp.get("model", "lbfgs"));
 
