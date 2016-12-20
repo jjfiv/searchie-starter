@@ -47,9 +47,11 @@ public class SimpleToken {
     List<List<SimpleToken>> dataBySentence = new ArrayList<>();
     List<SimpleToken> cur = new ArrayList<>();
     for (SimpleToken token : tokens) {
-      if(token == null && !cur.isEmpty()) {
-        dataBySentence.add(cur);
-        cur = new ArrayList<>();
+      if(token == null) {
+        if(cur.isEmpty()) {
+          dataBySentence.add(cur);
+          cur = new ArrayList<>();
+        }
       } else {
         cur.add(token);
       }

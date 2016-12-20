@@ -41,7 +41,10 @@ public class SNLPFeatures {
       },
       new IndexOfParser("w[-1]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-PW|C");
+          String result = beforeIfEndsWith(input, "-PW|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-PSEQpW|CpC");
+          return result;
         }
       },
       new IndexOfParser("p[1]") {
@@ -51,17 +54,26 @@ public class SNLPFeatures {
       },
       new IndexOfParser("sh[-1,0,1]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-PCNTYPE|C");
+          String result = beforeIfEndsWith(input, "-PCNTYPE|C");
+          return result;
         }
       },
       new IndexOfParser("sh[-1,0]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-PCTYPE|C");
+          String result = beforeIfEndsWith(input, "-PCTYPE|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-TYPES|CpC");
+          if(result != null) return result;
+          return result;
         }
       },
       new IndexOfParser("w[0]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-WORD|C");
+          String result = beforeIfEndsWith(input, "-WORD|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-PSEQW|CpC");
+          if(result != null) return result;
+          return result;
         }
       },
       new IndexOfParser("c[1]") {
@@ -86,7 +98,13 @@ public class SNLPFeatures {
       },
       new IndexOfParser("sh[0]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-TYPE|C");
+          String result = beforeIfEndsWith(input, "-TYPE|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-TPS2|CpC");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-PSEQcS|CpC");
+          if(result != null) return result;
+          return result;
         }
       },
       new IndexOfParser("w[0]p[1]") {
@@ -130,12 +148,25 @@ public class SNLPFeatures {
       },
       new IndexOfParser("c[0]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-DISTSIM|C");
+          String result = beforeIfEndsWith(input, "-DISTSIM|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-PSEQcDS|CpC");
+          if(result != null) return result;
+          return result;
         }
       },
       new IndexOfParser("c[-1]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-PDISTSIM|C");
+          String result = beforeIfEndsWith(input, "-PDISTSIM|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-PSEQpDS|CpC");
+          if(result != null) return result;
+          return result;
+        }
+      },
+      new IndexOfParser("c[-1,0]") {
+        @Override public String parseValue(String input) {
+          return beforeIfEndsWith(input, "-PSEQpcDS|CpC");
         }
       },
       new IndexOfParser("p[0]") {
@@ -150,12 +181,24 @@ public class SNLPFeatures {
       },
       new IndexOfParser("sh[-1]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-PTYPE|C");
+          String result = beforeIfEndsWith(input, "-PTYPE|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-PSEQpS|CpC");
+          return result;
         }
       },
       new IndexOfParser("sh[1]") {
         @Override public String parseValue(String input) {
-          return beforeIfEndsWith(input, "-NTYPE|C");
+          String result = beforeIfEndsWith(input, "-NTYPE|C");
+          if(result != null) return result;
+          result = beforeIfEndsWith(input, "-TNS1|CpC");
+          if(result != null) return result;
+          return result;
+        }
+      },
+      new IndexOfParser("w[-1,0]") {
+        @Override public String parseValue(String input) {
+          return beforeIfEndsWith(input, "-PSEQW2|CpC");
         }
       },
       new IndexOfParser("w[0]p[0]") {
@@ -185,7 +228,6 @@ public class SNLPFeatures {
   }
   public static void toFieldFeatures(Collection<String> inputFeatures, Map<String, Set<String>> ftText) {
     for (String inputFeature : inputFeatures) {
-      if(inputFeature.endsWith("|CpC")) continue; // skip all these cluster features.
       for ( IndexOfParser parser : featureParsers ) {
         parser.extractToFielded(inputFeature , ftText);
       }
@@ -193,14 +235,19 @@ public class SNLPFeatures {
   }
 
   private static void parseStanfordNERFeatures( String fstr, Set<String> parsed_features ) {
-    if(fstr.endsWith("|CpC")) return; // skip all these cluster features.
-
+    fstr = fstr.trim();
+    if(fstr.equals("PSEQ|CpC")) return;
+    boolean found = false;
     for ( IndexOfParser parser : featureParsers ) {
       String fvalue = parser.parse( fstr );
       if ( fvalue != null ) {
         parsed_features.add(fvalue);
-        return;
+        found = true;
+        break;
       }
+    }
+    if(!found) {
+      System.err.println(fstr);
     }
   }
 

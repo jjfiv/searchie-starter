@@ -12,7 +12,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javaVersion>1.8</javaVersion>
     <galagoVersion>3.11-SNAPSHOT</galagoVersion>
-    <chaiVersion>0.9-SNAPSHOT</chaiVersion>
     <mainClass>edu.umass.cs.ciir.searchie.starter.BasicExperiment</mainClass>
   </properties>
 
@@ -50,8 +49,8 @@
 
     <dependency>
       <groupId>edu.umass.cs.ciir.jfoley</groupId>
-      <artifactId>chai-core</artifactId>
-      <version>${chaiVersion}</version>
+      <artifactId>chai</artifactId>
+      <version>0.10-SNAPSHOT</version>
     </dependency>
 
     <dependency>
